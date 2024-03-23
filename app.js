@@ -4,13 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const bodyParser = require("body-parser");
 const logger = require('morgan');
-
-const indexRouter = require('./routes/index');
-const loginRouter = require('./routes/login');
-const sessionRouter = require('./routes/newSession');
-const payloadRouter = require('./routes/terraPayload');
-const mongoRouter = require('./routes/getData');
-const userRouter = require('./routes/user');
+const frameRoutes = require('./routes/frame'); // Your new route file
 
 const cors = require('cors');
 const app = express();
@@ -29,7 +23,7 @@ app.use(express.urlencoded({ extended: true, limit: '25mb' }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+app.use('/frame', frameRoutes); // Mount your frame routes
 
 
 // catch 404 and forward to error handler
