@@ -1,35 +1,61 @@
-const express = require('express');
-const router = express.Router();
-const uuid = require('uuid'); // Make sure to install this package
+import { Frog, Button } from 'frog';
 
-// Mock database to store frame data
+// Initialize a new Frog application
+const app = new Frog();
+
+// A mock "database" to store frame layouts
 const frameDatabase = {};
 
-router.post('/create-frame', (req, res) => {
-    const frameId = uuid.v4();
-    const frameData = req.body; // This would be your frame layout data from the frontend
+// Define a frame route that creates a frame from the frontend editor state
+app.frame('/create-frame', (c) => {
+  // Extract the frame layout from the request body
+  const { layout } = c.req.body;
 
-    // Store the frame data in your "database"
-    frameDatabase[frameId] = frameData;
+  // Generate a unique frame ID and store the layout in the "database"
+  const frameId = Math.random().toString(36).substring(2, 15); // You should use a more robust method for ID generation
+  frameDatabase[frameId] = layout;
 
-    // Generate a public URL for the frame
-    const frameUrl = `${req.protocol}://${req.get('host')}/frame/${frameId}`;
+  // Construct the URL to access the individual frame
+  const frameUrl = `${c.req.protocol}://${c.req.get('host')}/frames/${frameId}`;
 
-    // Respond with the URL of the newly created frame
-    res.json({ frameUrl });
+  // Respond with the URL of the newly created frame
+  return c.res({ status: 200, body: { frameUrl } });
 });
 
-router.get('/:frameId', (req, res) => {
-    const frameId = req.params.frameId;
-    const frameData = frameDatabase[frameId];
+// Define a route to serve a frame based on its ID
+app.frame('/frames/:frameId', (c) => {
+  // Retrieve the frame ID from the URL
+  const { frameId } = c.req.params;
 
-    if (!frameData) {
-        return res.status(404).send('Frame not found');
+  // Look up the frame layout in the "database"
+  const layout = frameDatabase[frameId];
+
+  if (!layout) {
+    // If the layout doesn't exist, return a 404 response
+    return c.res({ status: 404, body: 'Frame not found' });
+  }
+
+  // Use the layout data to construct the frame's elements
+  const elements = layout.map((item) => {
+    switch (item.type) {
+      case 'button':
+        return <Button value={item.value}>{item.text}</Button>;
+      case 'image':
+        return <img src={item.imageUrl} alt={item.altText} />;
+      default:
+        return null; // Handle other element types or throw an error
     }
+  });
 
-    // Here you would render the frame using the stored data
-    // For this example, we are assuming frameData contains an imageURL.
-    res.send(`<html><body><img src="${frameData.imageURL}" /></body></html>`);
+  // Respond with the frame content
+  return c.res({
+    body: (
+      <div>
+        {elements}
+      </div>
+    ),
+  });
 });
 
-module.exports = router;
+// Export the Frog application for use in the entry point of the backend
+export default app;
