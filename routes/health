@@ -4,7 +4,7 @@ const router = express.Router();
 // login handling
 router.post('/', (req, res) => {
     console.log('Health Attempt');
-    res.status(200);a
+    res.status(200)
 });
 
 module.exports = router;
