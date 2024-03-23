@@ -26,14 +26,18 @@ router.post('/load-frames', async (req, res) => {
         // Combine and deduplicate the FIDs
         const allFIDs = [...new Set([...engagedFIDsArray, ...followingFIDsArray])];
         // Convert the set back into an array and take only the first 10 items
-        const limitedFIDs = Array.from(allFIDs).slice(0, 10);
+        const limitedFIDs = Array.from(allFIDs).slice(0, 4);
         // Fetch casts for each FID
         const allCastsPromises = limitedFIDs.map(fid => fetchCastsByFID(fid));
         const allCastsResults = await Promise.all(allCastsPromises);
+        console.log("allCastsResults: ", allCastsResults);
+
         const allCasts = allCastsResults.flat(); // Flatten the array of arrays
         // const allCasts = allFIDs.flat(); // Flatten the array of arrays
 
         // Return the combined casts to the client
+        console.log("Sending back casts: ", allCasts);
+
         res.json(allCasts);
     } catch (error) {
         console.error('Error loading frames:', error);
@@ -63,18 +67,21 @@ async function fetchCastsByFID(fid) {
                 'Authorization': `Bearer ${PINATA_API_KEY}`
             },
         });
-        console.log("Response for fid: ", fid, " is ", response);
+
         if (!response.ok) {
-            console.error("Error response:", response);
-            return; // Exit if response is not ok to avoid further errors
+            throw new Error(`API call failed with status: ${response.status}`);
         }
+
         const data = await response.json();
-        console.log("All casts from users : ", data);
-        return data.casts; // Assuming the response contains a 'casts' array
+        console.log("All casts from users for fid: ", fid, ": ", data);
+
+        return data.data.casts; // Ensure this matches the actual structure of your response
     } catch (error) {
-        console.error("Error fetching casts for fid:", fid, error);
+        console.error(`Error fetching casts for fid ${fid}:`, error);
+        return []; // Return an empty array or handle the error as appropriate
     }
 }
+
 
 
 export default router;
