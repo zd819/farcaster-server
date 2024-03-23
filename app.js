@@ -5,9 +5,14 @@ import loadFramesRouter from './routes/load-frames.js';
 import cookieParser from 'cookie-parser';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+// import 'dotenv';
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+const dotenv = await import('dotenv');
+dotenv.config();
 
 import cors from 'cors';
 const app = express();
@@ -55,7 +60,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
 
 
 export default app;
