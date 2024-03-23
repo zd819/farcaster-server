@@ -1,5 +1,5 @@
-const express = require('express');
-const router = express.Router();
+import { Router } from 'express';
+const router = Router();
 
 // login handling
 router.post('/', (req, res) => {
@@ -7,4 +7,4 @@ router.post('/', (req, res) => {
     res.status(200)
 });
 
-module.exports = router;
+export default router;
