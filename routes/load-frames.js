@@ -1,6 +1,6 @@
-const express = require('express');
-const fetch = require('node-fetch');
-const router = express.Router();
+import { Router } from 'express';
+import fetch from 'node-fetch';
+const router = Router();
 
 // Environment variables for API keys and base URLs
 const KARMA3LABS_API_URL = process.env.KARMA3LABS_API_URL;
@@ -10,7 +10,9 @@ const PINATA_API_KEY = process.env.PINATA_API_KEY;
 // Route to load frames based on user's wallet address
 router.post('/load-frames', async (req, res) => {
     try {
-        const walletAddress = req.body.walletAddress;
+        // const walletAddress = req.body.walletAddress;
+        //Testing purposes:
+        const walletAddress = "0x4114e33eb831858649ea3702e1c9a2db3f626446";
         // Fetch engagement and following FIDs from Karma3Labs API
         const engagedFIDs = await fetchNeighbors(walletAddress, '/graph/neighbors/engagement/addresses');
         const followingFIDs = await fetchNeighbors(walletAddress, '/graph/neighbors/following/addresses');
@@ -56,4 +58,4 @@ async function fetchCastsByFID(fid) {
     return data.casts; // Assuming the response contains a 'casts' array
 }
 
-module.exports = router;
+export default router;

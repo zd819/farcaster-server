@@ -4,17 +4,17 @@
  * Module dependencies.
  */
 
-const app = require('../app');
+import app, { set } from '../app.js';
 const debug = require('debug')('backend:server');
-const http = require('http');
-const cors = require('cors');
+import { createServer } from 'http';
+// import cors from 'cors';
 
 /**
  * Get port from environment and store in Express.
  */
 
 const port = normalizePort('8080'); //process.env.PORT || 
-app.set('port', port);
+set('port', port);
 
 /**
  * Create HTTP server.
@@ -34,7 +34,7 @@ mongoClient.connect((err,client) => {
 });
 
 
-const server = http.createServer(app);
+const server = createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
