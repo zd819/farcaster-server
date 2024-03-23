@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-import app, { set } from '../app.js';
+import app from '../app.js';
 const debug = require('debug')('backend:server');
 import { createServer } from 'http';
 // import cors from 'cors';
@@ -14,7 +14,7 @@ import { createServer } from 'http';
  */
 
 const port = normalizePort('8080'); //process.env.PORT || 
-set('port', port);
+app.set('port', port);
 
 /**
  * Create HTTP server.

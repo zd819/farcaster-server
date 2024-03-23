@@ -1,9 +1,9 @@
 import createError from 'http-errors';
 import express, { json, urlencoded, static as serveStatic } from 'express';
 import { join } from 'path';
-import { json as _json } from "body-parser";
 // const frameRoutes = require('./routes/frame'); // Your new route file
-import loadFramesRouter from './routes/load-frames';
+import loadFramesRouter from './routes/load-frames.js';
+import cookieParser from 'cookie-parser';
 
 
 
@@ -23,7 +23,7 @@ app.use(urlencoded({ extended: true, limit: '25mb' }));
 app.use(cookieParser());
 app.use(serveStatic(join(__dirname, 'public')));
 
-app.use('/frame', frameRoutes); // Mount your frame routes
+// app.use('/frame', frameRoutes); // Mount your frame routes
 app.use('/api', loadFramesRouter);
 
 
