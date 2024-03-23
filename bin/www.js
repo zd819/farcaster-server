@@ -5,9 +5,11 @@
  */
 
 import app from '../app.js';
-const debug = require('debug')('backend:server');
+// New ES Module import
+import debugModule from 'debug';
 import { createServer } from 'http';
 // import cors from 'cors';
+const debug = debugModule('backend:server');
 
 /**
  * Get port from environment and store in Express.
@@ -20,18 +22,6 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-mongoClient.connect((err,client) => {
-
-  if(err) throw err;
-
-  db = client.db("Terra");
-  userDB = db.collection("users");
-  wearableDB = db.collection("wearable_data");
-
-  console.log("Mongo Connected");
-
-
-});
 
 
 const server = createServer(app);

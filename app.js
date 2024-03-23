@@ -1,11 +1,13 @@
 import createError from 'http-errors';
 import express, { json, urlencoded, static as serveStatic } from 'express';
-import { join } from 'path';
 // const frameRoutes = require('./routes/frame'); // Your new route file
 import loadFramesRouter from './routes/load-frames.js';
 import cookieParser from 'cookie-parser';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 import cors from 'cors';
 const app = express();
@@ -18,8 +20,9 @@ app.use(cors());
 app.use(json({ limit: '25MB' }));
 
 //app.use(bodyParser.urlencoded({ extended: false }));
-app.use(_json({limit: '25mb'}));
-app.use(urlencoded({ extended: true, limit: '25mb' }));
+// Use Express's built-in JSON parser middleware with a limit of 25MB
+app.use(express.json({ limit: '25mb' }));
+app.use(express.urlencoded({ extended: true, limit: '25mb' }));
 app.use(cookieParser());
 app.use(serveStatic(join(__dirname, 'public')));
 
