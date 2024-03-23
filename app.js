@@ -5,6 +5,9 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require("body-parser");
 const logger = require('morgan');
 const frameRoutes = require('./routes/frame'); // Your new route file
+const loadFramesRouter = require('./load-frames');
+
+
 
 const cors = require('cors');
 const app = express();
@@ -24,6 +27,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/frame', frameRoutes); // Mount your frame routes
+app.use('/api', loadFramesRouter);
 
 
 // catch 404 and forward to error handler
