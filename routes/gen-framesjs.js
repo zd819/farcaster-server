@@ -16,6 +16,18 @@ router.post('/generate-frame', async (req, res) => {
         // Frame content
         image: `<img src="${imageUrl}" alt="Uploaded Image">`,
         // Additional frame data
+
+        // Open Frame standard:
+        accepts: [
+          {
+            id: 'farcaster',
+            version: 'vNext',
+          },
+          {
+            id: 'xmtp',
+            version: 'vNext',
+          },
+        ],
         // ...
       };
     });
