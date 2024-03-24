@@ -2,8 +2,8 @@ import { Router } from 'express';
 import fetch from 'node-fetch';
 const router = Router();
 import 'dotenv/config';
-import { get_preference } from '../functions/get_preference';
-import userFrames from '../functions/all-casts';
+// import { get_preference } from '../functions/get_preference';
+// import userFrames from '../functions/all-casts.js';
 
 // A mock "database" to store user preferences and sorted frames for the purpose of this example
 let mockDatabase = {
@@ -26,6 +26,8 @@ function getUserSortedFrames(userId) {
 router.post('/personalize-feed', async function(req, res) {
   const { userId, preference } = req.body; // Expecting a userId to associate the preference
   let sortedFrames = [];
+  // Retrieve the value from the global object
+  const userFrames = global.userFrames;
 
   // FOR TESTING DISABLE :
   // LLM processing to determine the sorting method

@@ -1,8 +1,9 @@
-// Assuming allCasts is defined and filled with data in this file
+// all-casts.js
 let userFrames = [
-    // ... your casts data
-  ];
-  
-  // Export allCasts so it can be imported in other files
-export default { userFrames };
-  
+  // ... your casts data
+];
+
+// Assign it to the global object
+global.userFrames = userFrames;
+
+// You don't need to export if you are assigning it to the global object

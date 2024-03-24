@@ -2,6 +2,7 @@ import createError from 'http-errors';
 import express, { json, urlencoded, static as serveStatic } from 'express';
 // const frameRoutes = require('./routes/frame'); // Your new route file
 import loadFramesRouter from './routes/load-frames.js';
+import personalizeRouter from './routes/order-frames.js';
 import cookieParser from 'cookie-parser';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -33,6 +34,7 @@ app.use(serveStatic(join(__dirname, 'public')));
 
 // app.use('/frame', frameRoutes); // Mount your frame routes
 app.use('/api', loadFramesRouter);
+app.use('/api', personalizeRouter);
 
 
 // catch 404 and forward to error handler

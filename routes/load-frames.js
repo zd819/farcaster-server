@@ -2,6 +2,7 @@ import { Router } from 'express';
 import fetch from 'node-fetch';
 const router = Router();
 import 'dotenv/config';
+// import userFrames from '../functions/all-casts.js';
 
 // Environment variables for API keys and base URLs
 const KARMA3LABS_API_URL = process.env.KARMA3LABS_API_URL;
@@ -17,7 +18,7 @@ router.post('/load-frames', async (req, res) => {
 
         // Vitalik FID for testing 
         const fiDtest= '5650';
-        
+
         // Fetch engagement and following FIDs from Karma3Labs API
         const engagedFIDs = await fetchNeighbors(fiDtest, '/graph/neighbors/engagement/fids');
         const followingFIDs = await fetchNeighbors(fiDtest, '/graph/neighbors/following/fids');
@@ -36,7 +37,11 @@ router.post('/load-frames', async (req, res) => {
 
         const allCasts = allCastsResults.flat(); // Flatten the array of arrays
         // const allCasts = allFIDs.flat(); // Flatten the array of arrays
-
+        // Retrieve the value from the global object
+        // update-frames.js
+        global.userFrames = [
+            allCasts
+        ];
         // Return the combined casts to the client
         res.json(allCasts);
     } catch (error) {
