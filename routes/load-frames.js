@@ -14,7 +14,10 @@ router.post('/load-frames', async (req, res) => {
         // const walletAddress = req.body.walletAddress;
         //Testing purposes:
         const walletAddress = "0x4114e33eb831858649ea3702e1c9a2db3f626446";
+
+        // Vitalik FID for testing 
         const fiDtest= '5650';
+        
         // Fetch engagement and following FIDs from Karma3Labs API
         const engagedFIDs = await fetchNeighbors(fiDtest, '/graph/neighbors/engagement/fids');
         const followingFIDs = await fetchNeighbors(fiDtest, '/graph/neighbors/following/fids');
@@ -30,14 +33,11 @@ router.post('/load-frames', async (req, res) => {
         // Fetch casts for each FID
         const allCastsPromises = limitedFIDs.map(fid => fetchCastsByFID(fid));
         const allCastsResults = await Promise.all(allCastsPromises);
-        console.log("allCastsResults: ", allCastsResults);
 
         const allCasts = allCastsResults.flat(); // Flatten the array of arrays
         // const allCasts = allFIDs.flat(); // Flatten the array of arrays
 
         // Return the combined casts to the client
-        console.log("Sending back casts: ", allCasts);
-
         res.json(allCasts);
     } catch (error) {
         console.error('Error loading frames:', error);
@@ -59,7 +59,6 @@ async function fetchNeighbors(walletAddress, endpoint) {
 }
 
 async function fetchCastsByFID(fid) {
-    console.log("Getting casts for fid: ", fid);
     try {
         const response = await fetch(`${PINATA_API_URL}/casts?fid=${fid}`, {
             method: 'GET',
@@ -73,8 +72,6 @@ async function fetchCastsByFID(fid) {
         }
 
         const data = await response.json();
-        console.log("All casts from users for fid: ", fid, ": ", data);
-
         return data.data.casts; // Ensure this matches the actual structure of your response
     } catch (error) {
         console.error(`Error fetching casts for fid ${fid}:`, error);
