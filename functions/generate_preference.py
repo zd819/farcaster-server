@@ -1,9 +1,11 @@
-# path_to_your_python_script.py
 import sys
 import json
 from jsonschema import ValidationError
 from preference_model import PreferenceInput
-import llm  # This should be your module for interacting with the LLM
+import openai
+
+# Your OpenAI API key should be set as an environment variable for security reasons
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Read the serialized data from the command line argument
 serialized_data = sys.argv[1]
@@ -19,9 +21,18 @@ except ValidationError as e:
 # Create a prompt for the LLM
 prompt = f"Organize feed based on: {preference_input.preference_text}."
 
-# Get the output from the LLM
-# You will need to replace this with actual code to call your LLM
-llm_output = llm.get_response(prompt)
+# Get the output from the LLM using OpenAI's API
+try:
+    llm_output = openai.Completion.create(
+        engine="text-davinci-003", # Or whatever the latest engine version is
+        prompt=prompt,
+        max_tokens=100
+    )
+    # Extract the text of the response
+    response_text = llm_output.choices[0].text.strip()
+except Exception as e:
+    print(json.dumps({'error': 'Error calling OpenAI API', 'details': str(e)}))
+    sys.exit(1)
 
 # Return the output
-print(json.dumps({'llm_output': llm_output}))
+print(json.dumps({'llm_output': response_text}))
