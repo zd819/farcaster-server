@@ -42,7 +42,7 @@ router.post('/personalize-feed', async function(req, res) {
   storeUserPreference(userId, preference, sortedFrames);
 
   // 1. Return the ordered frames back to the frontend
-  res.json(sortedFrames);
+  res.json({preference_output:sortedFrames});
 });
 
 // GET endpoint to retrieve the sorted frames for a user
