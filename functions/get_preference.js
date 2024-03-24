@@ -1,4 +1,4 @@
-async function get_preference(preference_text){
+export async function get_preference(preference_text){
   const userPreference = preference_text;
 
   // Serialize the input data so it can be passed to Python
